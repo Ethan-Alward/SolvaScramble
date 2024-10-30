@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HomePage">
+
+    <Button
+        android:id="@+id/startButton"
+        android:layout_width="173dp"
+        android:layout_height="86dp"
+        android:text="Start"
+        android:textAlignment="center"
+        android:textSize="48sp"
+        android:layout_marginBottom="75dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/difficultyOptions"
+        android:layout_width="275dp"
+        android:layout_height="375dp"
+        android:checkedButton="@id/easyButton"
+        app:layout_constraintBottom_toTopOf="@+id/startButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ScrambleLogoHomePage">
+
+        <RadioButton
+            android:id="@+id/easyButton"
+            android:layout_width="match_parent"
+            android:layout_height="125dp"
+            android:text="Easy"
+            android:textSize="28sp" />
+
+        <RadioButton
+            android:id="@+id/hardButton"
+            android:layout_width="match_parent"
+            android:layout_height="125dp"
+            android:text="Hard"
+            android:textSize="28sp" />
+
+        <RadioButton
+            android:id="@+id/extremeButton"
+            android:layout_width="match_parent"
+            android:layout_height="125dp"
+            android:text="EXTREME"
+            android:textSize="28sp" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/ScrambleLogoHomePage"
+        android:layout_width="387dp"
+        android:layout_height="72dp"
+        android:fontFamily="@font/allerta_stencil"
+        android:text="Solva Scramble"
+        android:textAlignment="center"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
