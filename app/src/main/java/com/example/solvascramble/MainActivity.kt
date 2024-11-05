@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.View
 import android.widget.Button
 import android.widget.Chronometer
@@ -72,37 +73,30 @@ class MainActivity : AppCompatActivity() {
         // so in the grid element on click listened if all imgRotationArray elements ar 0s the image is rotated correctly
 
 
-        //Adding Timer
+        // Adding Timer
         val timer = findViewById<Chronometer>(R.id.timer)
+        timer.base = SystemClock.elapsedRealtime()
         timer.start()
 
-        var timeStopped = 0
-
+        // Variable to hold the achieved time
+        var timeStopped: String
 
         //setting all the images up in imageView
         val gridLayout = findViewById<GridLayout>(R.id.gridLayout)
         gridLayout.rowCount = gridAmount
         gridLayout.columnCount = gridAmount
 
-        //diabling the share button
-        val share = findViewById<Button>(R.id.shareButton)
-        share.isEnabled = false
-        share.setOnClickListener {
+
+        // Set OnClickListener for share button
+        val shareButton: Button = findViewById(R.id.shareButton)
+        shareButton.isEnabled = false
+        shareButton.setOnClickListener {
 
             // set up share score.
+            //timeStopped = formatTime(SystemClock.elapsedRealtime() - timer.base)
+            timeStopped = formatTime(timer.text.toString())
 
-
-            val shareScore = Intent(Intent.ACTION_SEND).apply {
-                type = "*/*"
-                putExtra(Intent.EXTRA_EMAIL, "ealward@unb.ca")
-                putExtra(Intent.EXTRA_SUBJECT, "Scramble Score")
-                putExtra(
-                    Intent.EXTRA_TEXT,
-                    "Level completed: ${level}, time completed: ${timeStopped}"
-                )
-            }
-            startActivity(shareScore)
-
+            shareTime(timeStopped, level)
         }
 
 
@@ -132,7 +126,7 @@ class MainActivity : AppCompatActivity() {
                 if (imgRotationArray.contentEquals(winnerCheckerArray)) {
 
                     timer.stop()
-                    timeStopped = timer.baseline
+                    timeStopped = formatTime(timer.text.toString())
 
                     Toast.makeText(
                         this,
@@ -145,7 +139,7 @@ class MainActivity : AppCompatActivity() {
                     tv1.text = getString(R.string.scrambleMessage)
 
                     //display share score
-                    share.isEnabled = true
+                    shareButton.isEnabled = true
 
 
                 }
@@ -306,7 +300,53 @@ class MainActivity : AppCompatActivity() {
         // Return the array of bitmaps
         return imgs
 
+    }
 
+    // Format for printing the users time.
+    fun formatTime(time: String): String {
+        val timeParts = time.split(":")
+
+        val mins = timeParts[0].toInt()
+        val secs = timeParts[1].toInt()
+
+        val result: String
+
+        if(timeParts.size == 3){
+            val hours = timeParts[2].toInt()
+            result = "$hours hours $mins minutes $secs seconds"
+        }
+        else if(mins == 0){
+            result = "$secs seconds"
+        }
+        else{
+            result = "$mins minutes $secs seconds"
+        }
+        return result
+    }
+
+    //Share Time function to send email
+    fun shareTime(time: String, level: String) {
+
+        // Email subject and contents.
+        val subject = "I completed today's Scramble in $time!"
+        val message = "Hey! Can you beat my time? I just completed today's Scramble on $level in $time."
+
+        val emailIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "message/rfc822" // Ensures only email apps can handle the intent
+            //putExtra(Intent.EXTRA_EMAIL, "ealward@unb.ca")
+            putExtra(Intent.EXTRA_EMAIL, "eriddell@unb.ca")
+            putExtra(Intent.EXTRA_SUBJECT, subject)
+            putExtra(Intent.EXTRA_TEXT, message)
+        }
+
+        // Check if there's an email client available to handle the intent
+        if (emailIntent.resolveActivity(packageManager) != null) {
+            startActivity(Intent.createChooser(emailIntent, "Send email."))
+            //startActivity(emailIntent)
+        }
+        else {
+            Toast.makeText(this, "No email app available", Toast.LENGTH_SHORT).show()
+        }
     }
 
 }
