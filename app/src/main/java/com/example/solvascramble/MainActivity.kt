@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
             gridAmount = 3
             level = "Easy"
 
-        } else if (difficulty == "1") {//easy{//hard
+        } else if (difficulty == "1") {//hard
 
             arrayAmount = 16
             gridAmount = 4
